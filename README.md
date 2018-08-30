@@ -1,7 +1,9 @@
 # Pentafile-javascript-sdk
 
-#Require 
-jquery-1.7.min.js +
+### Require 
+```html
+jquery-1.7 +
+```
 
 ### SDK de Pentafile Premise para Javascript
 ```html
