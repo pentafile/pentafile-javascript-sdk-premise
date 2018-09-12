@@ -5,9 +5,9 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <script src="https://code.jquery.com/jquery-1.7.min.js"></script>
-        <script src="https://cdn.pentafile.com/static/v1/pentafile.premise.js"></script>
+        <script src="https://static.pentafile.com/v1/pentafile.premise.js"></script>
         <script type="text/javascript">
-            var pentafile = new pentafile("http://IP:8080/premise", "appKey");
+            var pentafile = new pentafile("http://IP-SERVER:8080/pentafile", "appkey");
             window.pentafile = pentafile;
         </script>
     </head>
@@ -20,7 +20,8 @@
             <br>
             <br>
             <br>
-            <input type="button" name="upload" value="1. upload" onclick="uploadFile()">
+            <input type="button" name="upload" value="1.1 upload UI" onclick="uploadFileUI()">
+            <input type="button" name="upload" value="1.2 upload" onclick="uploadFile()">
             <input type="button" name="download" value="2. download" onclick="downloadFile()">
             <input type="button" name="info" value="3. info" onclick="infoFile()">
             <input type="button" name="delete" value="4. delete" onclick="deleteFile()">
@@ -29,6 +30,41 @@
         <div id="msm_result"></div>
     </center>
     <script type="text/javascript">
+        /**
+         * 
+         * Subir archivos con la UI de pentafile
+         */
+        function uploadFileUI() {
+            pentafile.uploadFileUI({
+                configUI: {
+                    allowedTypes: '*',
+                    maxFileSize: 8 * 1024 * 1024,
+                    crop_square: true,
+                    crop_circle: true,
+                    crop_rotate: true,
+                    txt_popup: 'Cargar archivo',
+                    txt_file_upload: 'Seleccione el archivo a cargar',
+                    txt_button_save: 'Guardar',
+                    txt_button_upload: 'Subir',
+                    txt_message_error: 'Se ha producido un erroe en el sistemaa, coordinar con TI'
+                },
+                start: function (file) {
+                    console.log('start', file);
+                },
+                success: function (record) {
+                    $("#field_upload1_key").val(record.key);
+                    console.log(record);
+                    $("#msm_result").html(JSON.stringify(record));
+                },
+                error: function (error) {
+                    console.log('error', error);
+                }
+            });
+        }
+        /**
+         * 
+         * Subir archivos solo con la API
+         */
         function uploadFile() {
             pentafile.uploadFile($('#file_1'), {
                 start: function (file) {
