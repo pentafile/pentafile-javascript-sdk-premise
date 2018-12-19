@@ -7,7 +7,7 @@ jquery-1.7 +
 
 ### SDK de Pentafile Premise
 ```html
-<script src="https://cdn.pentafile.com/static/pentafile.1.0.0.min.js"></script>
+<script src="https://static.pentafile.com/pentafile.1.0.0.min.js"></script>
 ```
 
 Descargar y abrir en el navegador, revisar la consola para ver la trazabilidad.
