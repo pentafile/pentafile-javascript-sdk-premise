@@ -5,29 +5,34 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <script src="https://code.jquery.com/jquery-1.7.min.js"></script>
-        <script src="https://static.pentafile.com/v1/pentafile.premise.js"></script>
+        <script src="https://static.pentafilestore.com/pentafile.1.0.0.min.js"></script>
         <script type="text/javascript">
-            var pentafile = new pentafile("http://IP-SERVER:8080/pentafile", "appkey");
+            // Pentafile Cloud
+            //var pentafile = new pentafile("AppKey");
+            //Pentafile On Premise
+            //var pentafile = new pentafile("http://my-ip:8080/pentafile","AppKey");
             window.pentafile = pentafile;
         </script>
     </head>
     <body>
         <div>Pentafile Upload files</div>
+        <img src="" id="image_upload" />
     <center>
         <form method="POST" >
             <input type="file" id="file_1" name="file_1">
-            <input type="hidden" id="field_upload1_key" name="field_upload1_key">
+            <input type="hidden" id="field_upload_id" name="field_upload_id">
             <br>
             <br>
             <br>
             <input type="button" name="upload" value="1.1 upload UI" onclick="uploadFileUI()">
             <input type="button" name="upload" value="1.2 upload" onclick="uploadFile()">
             <input type="button" name="download" value="2. download" onclick="downloadFile()">
-            <input type="button" name="info" value="3. info" onclick="infoFile()">
+            <input type="button" name="download" value="3. info" onclick="infoFile()">
             <input type="button" name="delete" value="4. delete" onclick="deleteFile()">
         </form>
         <hr>
         <div id="msm_result"></div>
+        <img src="" id="result_img" />
     </center>
     <script type="text/javascript">
         /**
@@ -43,17 +48,22 @@
                     crop_circle: true,
                     crop_rotate: true,
                     txt_popup: 'Cargar archivo',
-                    txt_file_upload: 'Seleccione el archivo a cargar',
+                    txt_file_upload: 'Seleccione el archivo',
                     txt_button_save: 'Guardar',
                     txt_button_upload: 'Subir',
-                    txt_message_error: 'Se ha producido un erroe en el sistemaa, coordinar con TI'
+                    txt_message_error: 'Se ha producido un error en el sistema, coordinar con TI'
                 },
                 start: function (file) {
                     console.log('start', file);
                 },
                 success: function (record) {
-                    $("#field_upload1_key").val(record.key);
+                    $("#field_upload_id").val(record.id);
                     console.log(record);
+                    if (record.type = 'image/png' || record.type == 'image/jpeg') {
+                        $("#result_img").attr("src", record.url);
+                    } else {
+                        $("#result_img").attr("src", '');
+                    }
                     $("#msm_result").html(JSON.stringify(record));
                 },
                 error: function (error) {
@@ -74,8 +84,13 @@
                     console.log("upload progress: " + Math.round(progress) + "%");
                 },
                 success: function (record) {
-                    $("#field_upload1_key").val(record.key);
+                    $("#field_upload_id").val(record.id);
                     console.log(record);
+                    if (record.type = 'image/png' || record.type == 'image/jpeg') {
+                        $("#result_img").attr("src", record.url);
+                    } else {
+                        $("#result_img").attr("src", '');
+                    }
                     $("#msm_result").html(JSON.stringify(record));
                 },
                 error: function (error) {
@@ -84,16 +99,16 @@
             });
         }
         function downloadFile() {
-            var fileKey = $("#field_upload1_key").val();
-            pentafile.downloadFile(fileKey, {
+            var fileId = $("#field_upload_id").val();
+            pentafile.downloadFile(fileId, {
                 error: function (error) {
                     console.log('error', error);
                 }
             });
         }
         function infoFile() {
-            var fileKey = $("#field_upload1_key").val();
-            pentafile.infoFile(fileKey, {
+            var fileId = $("#field_upload_id").val();
+            pentafile.infoFile(fileId, {
                 success: function (record) {
                     console.log('success', record);
                     $("#msm_result").html(JSON.stringify(record));
@@ -104,10 +119,10 @@
             });
         }
         function deleteFile() {
-            var fileKey = $("#field_upload1_key").val();
-            pentafile.deleteFile(fileKey, {
-                success: function (record) {
-                    console.log('success', record);
+            var fileId = $("#field_upload_id").val();
+            pentafile.deleteFile(fileId, {
+                success: function (message) {
+                    console.log('success', message);
                 },
                 error: function (error) {
                     console.log('error', error);
