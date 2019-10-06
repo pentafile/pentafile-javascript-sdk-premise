@@ -1,6 +1,6 @@
 # Pentafile-javascript-sdk
 
-### SDK de Pentafile Premise
+### SDK de Pentafile
 ```html
 <script src="https://static.pentafilestore.com/pentafile.1.0.0.min.js"></script>
 ```
