@@ -1,4 +1,4 @@
-# Pentafile-javascript-sdk
+# Pentafile-sdk-javascript
 
 ### SDK de Pentafile
 ```html
