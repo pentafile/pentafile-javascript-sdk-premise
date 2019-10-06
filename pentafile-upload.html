@@ -4,22 +4,17 @@
         <title>Pentafile Upload Sample</title>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <script src="https://code.jquery.com/jquery-1.7.min.js"></script>
         <script src="https://static.pentafilestore.com/pentafile.1.0.0.min.js"></script>
         <script type="text/javascript">
-            // Pentafile Cloud
-            //var pentafile = new pentafile("AppKey");
-            //Pentafile On Premise
-            //var pentafile = new pentafile("http://my-ip:8080/pentafile","AppKey");
-            window.pentafile = pentafile;
+            window.pentafile = new pentafile("app key");
         </script>
     </head>
     <body>
         <div>Pentafile Upload files</div>
         <img src="" id="image_upload" />
     <center>
-        <form method="POST" >
-            <input type="file" id="file_1" name="file_1">
+        <form>
+            <input type="file" id="form_file" name="file_1">
             <input type="hidden" id="field_upload_id" name="field_upload_id">
             <br>
             <br>
@@ -33,6 +28,7 @@
         <hr>
         <div id="msm_result"></div>
         <img src="" id="result_img" />
+        <iframe id="frame_doc" style="display: none" width="600" height="400" src="" ></iframe>
     </center>
     <script type="text/javascript">
         /**
@@ -41,30 +37,22 @@
          */
         function uploadFileUI() {
             pentafile.uploadFileUI({
-                configUI: {
-                    allowedTypes: '*',
-                    maxFileSize: 8 * 1024 * 1024,
-                    crop_square: true,
-                    crop_circle: true,
-                    crop_rotate: true,
-                    txt_popup: 'Cargar archivo',
-                    txt_file_upload: 'Seleccione el archivo',
-                    txt_button_save: 'Guardar',
-                    txt_button_upload: 'Subir',
-                    txt_message_error: 'Se ha producido un error en el sistema, coordinar con TI'
-                },
                 start: function (file) {
                     console.log('start', file);
                 },
                 success: function (record) {
-                    $("#field_upload_id").val(record.id);
+                    document.getElementById('field_upload_id').value = record.key;
                     console.log(record);
-                    if (record.type = 'image/png' || record.type == 'image/jpeg') {
-                        $("#result_img").attr("src", record.url);
+                    if (record.type == 'image/png' || record.type == 'image/jpeg') {
+                        document.getElementById('frame_doc').style.display = 'none';
+                        document.getElementById('result_img').style.display = 'block';
+                        document.getElementById('result_img').src = record.url;
                     } else {
-                        $("#result_img").attr("src", '');
+                        document.getElementById('frame_doc').style.display = 'block';
+                        document.getElementById('result_img').style.display = 'none';
+                        document.getElementById('result_img').src = pentafile.getPreviewUrl(record.key, 120);
                     }
-                    $("#msm_result").html(JSON.stringify(record));
+                    document.getElementById('msm_result').innerHTML = JSON.stringify(record);
                 },
                 error: function (error) {
                     console.log('error', error);
@@ -76,7 +64,7 @@
          * Subir archivos solo con la API
          */
         function uploadFile() {
-            pentafile.uploadFile($('#file_1'), {
+            pentafile.uploadFile(document.getElementById('form_file'), {
                 start: function (file) {
                     console.log('start', file);
                 },
@@ -84,14 +72,18 @@
                     console.log("upload progress: " + Math.round(progress) + "%");
                 },
                 success: function (record) {
-                    $("#field_upload_id").val(record.id);
+                    document.getElementById('field_upload_id').value = record.key;
                     console.log(record);
-                    if (record.type = 'image/png' || record.type == 'image/jpeg') {
-                        $("#result_img").attr("src", record.url);
+                    if (record.type == 'image/png' || record.type == 'image/jpeg') {
+                        document.getElementById('frame_doc').style.display = 'none';
+                        document.getElementById('result_img').style.display = 'block';
+                        document.getElementById('result_img').src = record.url;
                     } else {
-                        $("#result_img").attr("src", '');
+                        document.getElementById('frame_doc').style.display = 'block';
+                        document.getElementById('result_img').style.display = 'none';
+                        document.getElementById('result_img').src = pentafile.getPreviewUrl(record.key, 120);
                     }
-                    $("#msm_result").html(JSON.stringify(record));
+                    document.getElementById('msm_result').innerHTML = JSON.stringify(record);
                 },
                 error: function (error) {
                     console.log('error', error);
@@ -99,7 +91,7 @@
             });
         }
         function downloadFile() {
-            var fileId = $("#field_upload_id").val();
+            var fileId = document.getElementById('field_upload_id').value;
             pentafile.downloadFile(fileId, {
                 error: function (error) {
                     console.log('error', error);
@@ -107,11 +99,11 @@
             });
         }
         function infoFile() {
-            var fileId = $("#field_upload_id").val();
+            var fileId = document.getElementById('field_upload_id').value;
             pentafile.infoFile(fileId, {
                 success: function (record) {
                     console.log('success', record);
-                    $("#msm_result").html(JSON.stringify(record));
+                    document.getElementById('msm_result').innerHTML = JSON.stringify(record);
                 },
                 error: function (error) {
                     console.log('error', error);
@@ -119,7 +111,7 @@
             });
         }
         function deleteFile() {
-            var fileId = $("#field_upload_id").val();
+            var fileId = document.getElementById('field_upload_id').value;
             pentafile.deleteFile(fileId, {
                 success: function (message) {
                     console.log('success', message);
