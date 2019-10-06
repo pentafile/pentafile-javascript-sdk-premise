@@ -1,10 +1,5 @@
 # Pentafile-javascript-sdk
 
-### Dependencia 
-```html
-jquery-1.7 +
-```
-
 ### SDK de Pentafile Premise
 ```html
 <script src="https://static.pentafilestore.com/pentafile.1.0.0.min.js"></script>
